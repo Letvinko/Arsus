@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
+
+    <link rel="icon" href="Logo putih.png">
+    <script type="text/javascript" src="auth.js">
+    </script>
+    <title>Arsus</title>
+    <style>
+      #searchBar{
+        border:1px solid #979797;
+        padding:5px;
+        outline:none;
+        width:50%;
+        margin-left:25%;
+      }
+      #btnSearch{
+        background:#F5F5F5;
+        border:1px solid #979797;
+        padding:10px;
+        outline:none;
+        border-left:none;
+      }
+      .header{
+        position:static;
+        top:5%;
+      }
+      #suratarsip{
+        width:40%;
+        position:static;
+        margin-top:20%;
+        margin-left:15%;
+        margin-bottom:5%;
+        text-align:center;
+      }
+      .content{
+        position:static;
+        float:right;
+        margin-right:10%;
+        margin-top:5%;
+      }
+      #btnHome{
+        border-radius:5px;
+        padding:0px;
+        background-color:#E8E8E8;
+        border:none;
+        transition:.3s;
+        margin-left: 9%;
+      }
+      #btnHome:active{
+        outline:black;
+      }
+      #btnHome:hover{
+       border:2px solid #D0021B;
+       border-radius:9px;
+      }
+      #img:active{
+        box-shadow: 0px 0px 0px 1px rgb(208, 2, 27);
+        animation: anim-shadow .1s forwards;
+      }
+
+      @keyframes anim-shadow{
+        100%{
+          box-shadow: 0px 0px 50px 20px rgb(130, 3, 18 , 0);
+        }
+      }
+
+      #img{
+        width:50px;
+      }
+      div .wrapper {
+        position: fixed;
+        top: 0;
+        padding: 30px 0px;
+        font-size: 20px;
+      }
+      ul{
+        list-style-type:none;
+      }
+      .wrapper{
+        background:#E8E8E8;
+        margin-left:-2%;
+        float:left;
+        display:flex;
+        position:fixed;
+      }
+      .wrapper .siderbar{
+        position:fixed;
+        width:200px;
+        height:90%;
+        padding:30px 0px;
+      }
+      .wrapper .sidebar ul li{
+        padding:10px 10px;
+      }
+      .wrapper .siderbar .footersiderbar{
+        position:absolute;
+        bottom:0;
+      }
+      #footer{
+        width:62px;
+        margin-left:43%;
+        margin-top:200%;
+        margin-bottom:50%;
+      }
+      #searchBar:hover{
+        cursor: text;
+      }
+      @media only screen and (min-height: 670px){
+        #footer{
+          margin-top:350%;
+          margin-bottom:500%;
+        }
+      }
+      @media only screen and (min-height: 854px){
+        #footer{
+          margin-top:500%;
+          margin-bottom:1000%;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="archive">
+      <div class="wrapper">
+        <div class="sidebar">
+          <ul>
+            <li>
+                <button type="button" name="button1" id="btnHome" class="btn btn-danger"><img id="img" src="assets\Logo putih.png" alt="" onclick="Landing()"></button>
+            </li>
+            <li>
+              <hr style="background-color:black;">
+            </li>
+            <li>
+                <button type="button" name="button2" id="btnHome" class="btn btn-danger"><img id="img" src="assets\Archive merah.png" alt=""></button>
+            </li>
+            <li>
+                <button type="button" name="button3" id="btnHome" class="btn btn-danger"><img id="img" src="assets\Upload Putih.png" alt="" onclick="Upload()"></button>
+            </li>
+          </ul>
+          <div class="footersiderbar">
+            <img id="footer" src="assets\logo-kemenag.png" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="header">
+          <button type="button" name="button" class="btn btn-danger" style="margin-right:3%; margin-bottom:3%; margin-top:1%; float:right" onclick="logout()">Logout</button>
+        <center>
+          <div class="input-group mb-3" id="searchBarHome">            
+            <button type="button" name="button" id="searchBar" style="background-color:transparent;text-align:left">Cari Surat</button>
+            <div class="input-group-append">
+              <button id="btnSearch" type="submit"><img src="assets\musica-searcher.png" alt="" style="width:20px;">
+              </button>
+            </div>
+          </div>
+        </center>
+      </div>
+      <div class="content">
+        <div class="form-group">
+          <label for="sel1">Pilih Kategori:</label>
+          <select class="form-control" id="sel1">
+            <option>Nama</option>
+            <option>Tahun</option>
+            <option>Tipe</option>
+            <option>Kepentingan</option>
+          </select>
+        </div>
+      </div>
+      <div class="container" style="margin-left:18%;margin-top:10%">
+        <div class="row" id="divRow">
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("searchBarHome").onclick = function(){
+        window.location = "SearchPage.html"
+      }
+
+      function logout(){
+        window.location.assign("mainwindow.html")
+      }
+      function Upload(){
+        window.location.assign("Upload.html")
+      }
+      function Landing(){
+        window.location.assign("Landingpage.html")
+      }
+      function Detail(namasurat){
+        window.localStorage.setItem('namasurat',namasurat);
+        window.location.assign("DetailSurat.html")
+      }
+
+      function Delete(namasurat){
+        firebase.database().ref("arsip_surat/"+namasurat).remove();
+        document.location.reload(true)
+      }
+
+      window.onload = function(){
+        firebase.database().ref("arsip_surat").once('value', function(snapshot){
+          var child = [];
+          snapshot.forEach(function (childSnapshot){
+            child.push(childSnapshot.val())
+          })
+          for(var i = 0; i < child.length;i++){
+
+            var divCol = document.createElement("div")
+            divCol.className = "col-4";
+            document.getElementById("divRow").appendChild(divCol);
+
+            var divCard = document.createElement("div")
+            divCard.className = "card";
+            divCard.id = "suratarsip"
+            divCard.style.width = "350px";
+            divCol.appendChild(divCard);
+
+            var tagCenter = document.createElement("center")
+            divCard.appendChild(tagCenter);
+
+            var img = document.createElement("img")
+            img.src = child[i].previewImage;
+            img.width = "300";
+            img.height = "320";
+            tagCenter.appendChild(img);
+
+            var divBody = document.createElement("div")
+            divBody.className = "card-body";
+            divCard.appendChild(divBody);
+
+            var title = document.createElement("h4")
+            title.className = "card-title";
+            title.innerHTML = child[i].namasurat
+            divBody.appendChild(title);
+
+            var comment = document.createElement("p")
+            comment.className = "card-text";
+            comment.innerHTML = child[i].comment
+            divBody.appendChild(comment);
+
+            var detail = document.createElement("a")
+            detail.className = "btn btn-primary";
+            detail.href = "javascript:Detail("+child[i].namasurat+")"
+            detail.innerHTML = "Lihat Detail"
+            detail.style.width = "50%"
+            divBody.appendChild(detail);
+
+            var separator = document.createElement("br")
+            divBody.append(separator)
+
+            var deleted = document.createElement("a")
+            deleted.className = "btn btn-danger";
+            deleted.style.marginTop = "10px"
+            deleted.style.width = "50%"
+            deleted.href = "javascript:Delete("+child[i].namasurat+")"
+            deleted.innerHTML = "Delete Surat"
+            divBody.appendChild(deleted);
+          }
+        })
+      }
+    </script>
+  </body>
+</html>

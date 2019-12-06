@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="icon" href="Logo putih.png">
+    <title>Arsus</title>
+  </head>
+  <style>
+    .jumbotron{
+      background:white;
+      border: 1px solid black;
+    }
+    .col-sm-4{
+      margin-left:33.5%;
+    }
+    input{
+      text-align:center;
+    }
+    .home{
+      margin-top: 5%;
+    }
+  </style>
+  <body>
+    <div class="home">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="jumbotron">
+              <div class="row">
+                <div class="col">
+                  <img src="assets\Logo Telkom.png" alt="" style="width:50px;">
+                </div>
+                <div class="col">
+                  <img src="assets\logo-kemenag.png" alt="" style="width:50px; float:right">
+                </div>
+              </div>
+              <span>
+                <div class="formgroup">
+                  <label for="Nama">Masukan Username:</label>
+                  <input id="Nama" type="text" class="form-control" name="nama1" placeholder="Username" required>
+                </div>
+                <br>
+                <div class="formgroup">
+                  <label for="pass1">Masukan password: </label>
+                  <input id="pass1" type="password" class="form-control" name="pass2" placeholder="********">
+                </div>
+                <br>
+                <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function login(){
+        var username = document.getElementById("Nama").value
+        var password = document.getElementById("pass1").value
+
+        // if(username == "AdminArsus" && password == 'MTSkaraw@ng04'){
+        if(username == "a" && password == 'a'){
+            window.location.assign("Landingpage.html")
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+            footer: '<a href>Why do I have this issue?</a>'
+          })
+        }
+      }
+
+    </script>
+  </body>
+</html>

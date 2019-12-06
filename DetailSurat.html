@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-storage.js"></script>
+
+    <link rel="icon" href="Logo putih.png">
+    <script type="text/javascript" src="auth.js">
+    </script>
+    <link rel="icon" href="Logo putih.png">
+    <title>Arsus</title>
+  </head>
+  <style>
+    #Backbtn{
+      margin-top: 2%;
+    }
+    .row{
+      margin-top: 5%;
+    }
+    tbody{
+      text-align:center;
+    }
+    radio{
+      margin-left:10px;
+    }
+    .flex{
+      display : flex;
+    }
+    .ContentAplod{
+      margin-top:5%;
+    }
+    label{
+      float:left;
+    }
+  </style>
+  <body>
+    <div class="details">
+      <div class="container">
+        <div class="headerDetails">
+        <button id="Backbtn" class="btn btn-danger" type="button" name="button" onclick="Back()">Kembali</button>
+        </div>
+        <div class="contentDetail">
+          <div class="row">
+            <div class="col-sm-5" style="margin-left:2%;">
+              <img src="" alt="" id="imageSurat" height="600" width="400">
+            </div>
+            <div class="col-sm-6">
+              <h5>Detail Surat</h5>
+              <div class="row">
+                <div class="col">
+                  <table class="table table-borderless">
+                    <tbody>
+                      <tr>
+                        <td>Nama Surat</td>
+                        <td id="namasurat"></td>
+                      </tr>
+                      <tr>
+                        <td>DD/MM/YYYY</td>
+                        <td id="date"></td>
+                      </tr>
+                      <tr>
+                        <td>Jalur (Masuk/Keluar)</td>
+                        <td id="jenis"></td>
+                      </tr>
+                      <tr>
+                        <td>Kategori Surat</td>
+                        <td id="kategori"></td>
+                      </tr>
+                      <tr>
+                        <td>Deskripsi Surat</td>
+                        <td id="comment"></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-backdrop="static" data-keyboard="false">Edit</button></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Surat</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <form class="" action="#" method="post" id="formUpdate">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="usr">Nama Surat:</label>
+                <input type="text" class="form-control" id="iptNamasurat" readonly>
+              </div>
+              <div class="flex">
+                <div class="form-group" style="margin-right:5%;">
+                  <label for="filter1">Tanggal:</label>
+                  <input type="text" name="tgl" value="" class="form-control" id="iptTgl">
+                </div>
+                <div class="form-group" style="margin-right:5%;">
+                  <label for="filter2">Bulan:</label>
+                  <input type="text" name="bln" value="" class="form-control" id="iptBln">
+                </div>
+                <div class="form-group" style="margin-right:5%;">
+                  <label for="filter3">Tahun:</label>
+                  <input type="text" name="thn" value="" class="form-control" id="iptThn">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="usr" style="margin-right:10%;">Jalur(Masuk/Keluar):</label>
+                <input type="radio" class="form-check-input" name="optradio1" id="masuk"> Masuk
+                <br>
+                <input type="radio" class="form-check-input" name="optradio1" id="keluar"> Keluar
+              </div>
+              <div class="form-group">
+                <label for="kategori">Kategori Surat:</label>
+                <input type="text" class="form-control" id="iptKategori">
+              </div>
+              <div class="form-group">
+                <label for="comment">Deskripsi Surat:</label>
+                <textarea class="form-control" rows="5" id="iptComment"></textarea>
+              </div>
+              <input type="submit" class="btn btn-primary" style="float:left; margin-bottom:5%;" value="Selesai">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      function Back(){
+        window.location.assign("Archive.html")
+      }
+
+      window.onload = function(){
+        var namasurat = window.localStorage.getItem('namasurat')
+        console.log(namasurat)
+
+        firebase.database().ref("arsip_surat/"+namasurat).on('value', function(snapshot){
+          var child = [];
+          snapshot.forEach(function(childSnapshot){
+            child.push(childSnapshot.val())
+          })
+          document.getElementById("namasurat").innerHTML = child[4]
+          document.getElementById("date").innerHTML = child[1]
+          document.getElementById("jenis").innerHTML = child[2]
+          document.getElementById("kategori").innerHTML = child[3]
+          document.getElementById("comment").innerHTML = child[0]
+          document.getElementById("imageSurat").src = child[5]
+
+          document.getElementById("iptNamasurat").value = child[4]
+
+          var dateArr = child[1].split("/");
+          document.getElementById("iptTgl").value = dateArr[0]
+          document.getElementById("iptBln").value = dateArr[1]
+          document.getElementById("iptThn").value = dateArr[2]
+
+          if(child[2] == "Masuk"){
+            document.getElementById("masuk").checked = true
+          }else{
+            document.getElementById("keluar").checked = true
+          }
+
+          document.getElementById("iptKategori").value = child[3]
+          document.getElementById("iptComment").value = child[0]
+        })
+      }
+
+      const formUpdate = document.querySelector('#formUpdate');
+      formUpdate.addEventListener('submit',(e) => {
+      	e.preventDefault();
+
+      	namasurat = formUpdate['iptNamasurat'].value;
+        tgl = formUpdate['iptTgl'].value;
+        bln = formUpdate['iptBln'].value;
+        thn = formUpdate['iptThn'].value;
+        radio = formUpdate['optradio1'].value;
+        kategori = formUpdate['iptKategori'].value;
+        comment = formUpdate['iptComment'].value;
+
+        firebase.database().ref("arsip_surat/"+namasurat).update({
+          date: tgl+"/"+bln+"/"+thn,
+          jenis_surat:radio,
+          kategori: kategori,
+          comment: comment,
+        })
+      })
+    </script>
+  </body>
+</html>
